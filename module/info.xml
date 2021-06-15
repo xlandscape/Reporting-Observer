@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Info>
+    <organization>knoell Germany GmbH</organization>
+    <author>Sebastian Multsch</author>
+    <email>smultsch@knoell.com</email>
+    <website>https://www.knoellconsult.com/en/</website>
+    <license>"GPLv3"</license>
+  <tool-description>create reporting aqRisk@LandcapeModel</tool-description>
+  <release-version>0.2</release-version> 
+  <release-notes>
+      <release-note> 0.1 First realese. </release-note>
+      <release-note> 0.2 bug fixes. </release-note>
+  </release-notes>
+</Info>
