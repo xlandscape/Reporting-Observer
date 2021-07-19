@@ -20,6 +20,7 @@ class ReportingObserver(base.Observer):
     """
     # RELEASES
     VERSION = base.VersionCollection(
+        base.VersionInfo("2.0.4", "2021-07-19"),
         base.VersionInfo("2.0.3", "2021-02-22"),
         base.VersionInfo("2.0.2", "2021-01-28"),
         base.VersionInfo("2.0.1", "2020-12-03"),
@@ -45,6 +46,8 @@ class ReportingObserver(base.Observer):
     VERSION.added("2.0.1", "Changelog and release history")
     VERSION.changed("2.0.2", "Can handle yearly survival probabilities")
     VERSION.fixed("2.0.3", "Survival reporting for Cascade")
+    VERSION.changed("2.0.4", "Changelog uses markdown")
+    VERSION.changed("2.0.4", "Spellings")
 
     def __init__(self, data, output_folder, **keywords):
         super(ReportingObserver, self).__init__()
