@@ -33,18 +33,18 @@ class ReportingObserver(base.Observer):
     )
 
     # CHANGELOG
-    VERSION.added("1.3.18", "observer.ReportingObserver")
-    VERSION.changed("1.3.19", "Updated observer.ReportingObserver module to v02")
-    VERSION.fixed("1.3.20", "observer.ReportingObserver skips processing if all efate inputs are switched off")
-    VERSION.added("1.3.24", "observer.ReportingObserver.flush() and observer.ReportingObserver.write()")
-    VERSION.changed("1.3.24", "observer.ReportingObserver uses base function to call observer module")
-    VERSION.fixed("1.3.24", "observer.ReportingObserver input slicing")
-    VERSION.fixed("1.3.29", "observer.ReportingObserver input slicing (again)")
-    VERSION.changed("1.3.35", "observer.ReportingObserver receives output folder as environment variable")
+    VERSION.added("1.3.18", "`observer.ReportingObserver` ")
+    VERSION.changed("1.3.19", "Updated `observer.ReportingObserver` module to v02")
+    VERSION.fixed("1.3.20", "`observer.ReportingObserver` skips processing if all fate inputs are switched off")
+    VERSION.added("1.3.24", "`observer.ReportingObserver.flush()` and `observer.ReportingObserver.write()`")
+    VERSION.changed("1.3.24", "`observer.ReportingObserver` uses base function to call observer module")
+    VERSION.fixed("1.3.24", "`observer.ReportingObserver` input slicing")
+    VERSION.fixed("1.3.29", "`observer.ReportingObserver` input slicing (again)")
+    VERSION.changed("1.3.35", "`observer.ReportingObserver` receives output folder as environment variable")
     VERSION.changed("2.0.0", "First independent release")
     VERSION.added("2.0.1", "Changelog and release history")
-    VERSION.changed("2.0.2", "can handle yearly survival probabilities")
-    VERSION.fixed("2.0.3", "survival reporting for Cascade")
+    VERSION.changed("2.0.2", "Can handle yearly survival probabilities")
+    VERSION.fixed("2.0.3", "Survival reporting for Cascade")
 
     def __init__(self, data, output_folder, **keywords):
         super(ReportingObserver, self).__init__()
@@ -68,16 +68,17 @@ class ReportingObserver(base.Observer):
         """
         # noinspection SpellCheckingInspection
         if self._params["cascade"] != "true" and self._params["cmfcont"] != "true" and self._params["steps"] != "true":
-            self.write_skip_message(os.path.join(self._output_folder, "message.txt"), "no efate data available")
+            self.write_skip_message(os.path.join(self._output_folder, "message.txt"), "no fate data available")
         elif self._params["lguts"] != "true":
             self.write_skip_message(os.path.join(self._output_folder, "message.txt"), "no effect data available")
         else:
             self.prepare_parameterization(os.path.join(self._output_folder, "attributes.xml"))
             # noinspection SpellCheckingInspection
             self.prepare_spray_drift_list(os.path.join(self._output_folder, "SpraydriftList.csv"))
+            # noinspection SpellCheckingInspection
             reaches = self.prepare_reach_list_and_get_reaches(os.path.join(self._output_folder, "ReachList.csv"),
                                                               os.path.join(self._output_folder, "reaches_lguts.csv"))
-            self.prepare_efate_effects(os.path.join(self._output_folder, "res.h5"), reaches)
+            self.prepare_fate_and_effects(os.path.join(self._output_folder, "res.h5"), reaches)
             self.prepare_catchment_list(os.path.join(self._output_folder, "CatchmentList.csv"))
             # noinspection SpellCheckingInspection
             base.run_process(self._call, None, self.default_observer, {"HOMEPATH": self._output_folder})
@@ -168,9 +169,9 @@ class ReportingObserver(base.Observer):
                             f.write("{:.4f}\n".format(exposure[event][0]))
         return
 
-    def prepare_efate_effects(self, output_file, reaches):
+    def prepare_fate_and_effects(self, output_file, reaches):
         """
-        Prepares the efate and effect inputs of the reporting observer module.
+        Prepares the environmental fate and effect inputs of the reporting observer module.
         :param output_file: The file path of the H5 file with the input data.
         :param reaches: A list of reaches.
         :return: Nothing.
@@ -184,6 +185,7 @@ class ReportingObserver(base.Observer):
                 x3df = stores.X3dfStore(source, mode="r")
                 if self._params["cascade"] == "true":
                     n_hours, n_reaches = x3df.describe(self._params["lm_cascade_ds"])["shape"]
+                    # noinspection SpellCheckingInspection
                     if self._params["lguts"] == "true":
                         n_days = int(n_hours / 24)
                         offset = day_difference if self._params["lm_cascade_survival_offset"] == "true" else 0
@@ -192,6 +194,7 @@ class ReportingObserver(base.Observer):
                         # noinspection SpellCheckingInspection
                         f.create_dataset(self._params["cascade_pecsw"], (len(databases), n_reaches, n_hours), np.float,
                                          compression="gzip", chunks=(1, 1, min(n_hours, 2 ** 18)))
+                        # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
                             f.create_dataset(self._params["cascade_survival"], (len(databases), n_reaches, n_days),
                                              np.float,
@@ -201,6 +204,7 @@ class ReportingObserver(base.Observer):
                         # noinspection SpellCheckingInspection
                         f[self._params["cascade_pecsw"]][mc, i, 0:n_hours] = x3df.get_values(
                             self._params["lm_cascade_ds"], slices=(slice(n_hours), r))
+                        # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
                             scales = x3df.describe(self._params["lm_steps_survival"])["scales"]
                             if scales == "time/day, space/base_geometry, other/factor":
@@ -227,14 +231,21 @@ class ReportingObserver(base.Observer):
                 # noinspection SpellCheckingInspection
                 if self._params["cmfcont"] == "true":
                     n_hours, n_reaches = x3df.describe(self._params["lm_cmf_continuous_ds"])["shape"]
+                    # noinspection SpellCheckingInspection
                     if self._params["lguts"] == "true":
                         n_days = int(n_hours / 24)
                         offset = day_difference if self._params["lm_cmf_survival_offset"] == "true" else 0
                     cmf_reaches = x3df.get_values(self._params["lm_cmf_continuous_reaches"])
                     if mc == 0:
                         # noinspection SpellCheckingInspection
-                        f.create_dataset(self._params["cmfcont_pecsw"], (len(databases), n_reaches, n_hours), np.float,
-                                         compression="gzip", chunks=(1, 1, min(n_hours, 2 ** 18)))
+                        f.create_dataset(
+                            self._params["cmfcont_pecsw"],
+                            (len(databases), n_reaches, n_hours),
+                            np.float,
+                            compression="gzip",
+                            chunks=(1, 1, min(n_hours, 2 ** 18))
+                        )
+                        # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
                             # noinspection SpellCheckingInspection
                             f.create_dataset(self._params["cmfcont_survival"], (len(databases), n_reaches, n_days),
@@ -245,6 +256,7 @@ class ReportingObserver(base.Observer):
                         # noinspection SpellCheckingInspection
                         f[self._params["cmfcont_pecsw"]][mc, i, 0:n_hours] = x3df.get_values(
                             self._params["lm_cmf_continuous_ds"], slices=(slice(n_hours), r))
+                        # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
                             scales = x3df.describe(self._params["lm_steps_survival"])["scales"]
                             if scales == "time/day, space/base_geometry, other/factor":
@@ -271,15 +283,17 @@ class ReportingObserver(base.Observer):
                             else:
                                 raise ValueError("Unsupported scales: " + scales)
                 if self._params["steps"] == "true":
-                    n_hours, n_reaches = x3df.describe(self._params["lm_steps_rivernetwork_ds"])["shape"]
+                    n_hours, n_reaches = x3df.describe(self._params["lm_steps_river_network_ds"])["shape"]
+                    # noinspection SpellCheckingInspection
                     if self._params["lguts"] == "true":
                         n_days = int(n_hours / 24)
                         offset = day_difference if self._params["lm_steps_survival_offset"] == "true" else 0
-                    steps_reaches = x3df.get_values(self._params["lm_steps_rivernetwork_reaches"])
+                    steps_reaches = x3df.get_values(self._params["lm_steps_river_network_reaches"])
                     if mc == 0:
                         # noinspection SpellCheckingInspection
                         f.create_dataset(self._params["steps_pecsw"], (len(databases), n_reaches, n_hours), np.float,
                                          compression="gzip", chunks=(1, 1, min(n_hours, 2 ** 18)))
+                        # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
                             f.create_dataset(self._params["steps_survival"], (len(databases), n_reaches, n_days),
                                              np.float,
@@ -288,7 +302,8 @@ class ReportingObserver(base.Observer):
                         r = np.nonzero(steps_reaches == reach)[0][0]
                         # noinspection SpellCheckingInspection
                         f[self._params["steps_pecsw"]][mc, i, 0:n_hours] = x3df.get_values(
-                            self._params["lm_steps_rivernetwork_ds"], slices=(slice(n_hours), r))
+                            self._params["lm_steps_river_network_ds"], slices=(slice(n_hours), r))
+                        # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
                             scales = x3df.describe(self._params["lm_steps_survival"])["scales"]
                             if scales == "time/day, space/base_geometry, other/factor":
