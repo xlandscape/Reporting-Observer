@@ -209,7 +209,7 @@ class ReportingObserver(base.Observer):
                             self._params["lm_cascade_ds"], slices=(slice(n_hours), r))
                         # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
-                            scales = x3df.describe(self._params["lm_steps_survival"])["scales"]
+                            scales = x3df.describe(self._params["lm_cascade_survival"])["scales"]
                             if scales == "time/day, space/base_geometry, other/factor":
                                 f[self._params["cascade_survival"]][mc, i, 0:n_days] = x3df.get_values(
                                     self._params["lm_cascade_survival"],
@@ -261,7 +261,7 @@ class ReportingObserver(base.Observer):
                             self._params["lm_cmf_continuous_ds"], slices=(slice(n_hours), r))
                         # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
-                            scales = x3df.describe(self._params["lm_steps_survival"])["scales"]
+                            scales = x3df.describe(self._params["lm_cmf_continuous_survival"])["scales"]
                             if scales == "time/day, space/base_geometry, other/factor":
                                 # noinspection SpellCheckingInspection
                                 f[self._params["cmfcont_survival"]][mc, i, 0:n_days] = x3df.get_values(
