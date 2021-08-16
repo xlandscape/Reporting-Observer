@@ -20,6 +20,7 @@ class ReportingObserver(base.Observer):
     """
     # RELEASES
     VERSION = base.VersionCollection(
+        base.VersionInfo("2.0.5", "2021-08-16"),
         base.VersionInfo("2.0.4", "2021-07-19"),
         base.VersionInfo("2.0.3", "2021-02-22"),
         base.VersionInfo("2.0.2", "2021-01-28"),
@@ -48,6 +49,7 @@ class ReportingObserver(base.Observer):
     VERSION.fixed("2.0.3", "Survival reporting for Cascade")
     VERSION.changed("2.0.4", "Changelog uses markdown")
     VERSION.changed("2.0.4", "Spellings")
+    VERSION.fixed("2.0.5", "Referencing of wrong datasets when obtaining scales")
 
     def __init__(self, data, output_folder, **keywords):
         super(ReportingObserver, self).__init__()
@@ -209,7 +211,7 @@ class ReportingObserver(base.Observer):
                             self._params["lm_cascade_ds"], slices=(slice(n_hours), r))
                         # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
-                            scales = x3df.describe(self._params["lm_steps_survival"])["scales"]
+                            scales = x3df.describe(self._params["lm_cascade_survival"])["scales"]
                             if scales == "time/day, space/base_geometry, other/factor":
                                 f[self._params["cascade_survival"]][mc, i, 0:n_days] = x3df.get_values(
                                     self._params["lm_cascade_survival"],
@@ -261,7 +263,7 @@ class ReportingObserver(base.Observer):
                             self._params["lm_cmf_continuous_ds"], slices=(slice(n_hours), r))
                         # noinspection SpellCheckingInspection
                         if self._params["lguts"] == "true":
-                            scales = x3df.describe(self._params["lm_steps_survival"])["scales"]
+                            scales = x3df.describe(self._params["lm_cmf_continuous_survival"])["scales"]
                             if scales == "time/day, space/base_geometry, other/factor":
                                 # noinspection SpellCheckingInspection
                                 f[self._params["cmfcont_survival"]][mc, i, 0:n_days] = x3df.get_values(
