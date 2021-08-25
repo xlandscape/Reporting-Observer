@@ -1,6 +1,16 @@
 # Changelog
 This is the changelog for the ReportingObserver. It was automatically created on 2021-08-25.
 
+## [2.0.6] - 2021-08-25
+
+### Added
+- Base documentation
+
+### Changed
+
+### Fixed
+
+
 ## [2.0.5] - 2021-08-16
 
 ### Added
