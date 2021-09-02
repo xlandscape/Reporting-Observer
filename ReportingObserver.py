@@ -10,7 +10,7 @@ import stores
 import numpy as np
 import datetime
 import h5py
-import ogr
+from osgeo import ogr
 import shutil
 
 
