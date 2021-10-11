@@ -20,6 +20,7 @@ class ReportingObserver(base.Observer):
     """
     # RELEASES
     VERSION = base.VersionCollection(
+        base.VersionInfo("2.0.8", "2021-10-11"),
         base.VersionInfo("2.0.7", "2021-09-02"),
         base.VersionInfo("2.0.6", "2021-08-25"),
         base.VersionInfo("2.0.5", "2021-08-16"),
@@ -54,6 +55,7 @@ class ReportingObserver(base.Observer):
     VERSION.fixed("2.0.5", "Referencing of wrong datasets when obtaining scales")
     VERSION.added("2.0.6", "Base documentation")
     VERSION.added("2.0.7", "ogr module import")
+    VERSION.changed("2.0.8", "Replaced legacy format strings by f-strings")
 
     def __init__(self, data, output_folder, **keywords):
         super(ReportingObserver, self).__init__()
@@ -61,7 +63,7 @@ class ReportingObserver(base.Observer):
         self._componentPath = os.path.dirname(__file__)
         script = os.path.join(self._componentPath, "module", "bin", "reporting.py")
         if not os.path.isfile(script):
-            raise FileNotFoundError('ReportingObserver script "' + script + '" not found')
+            raise FileNotFoundError(f"ReportingObserver script '{script}' not found")
         # noinspection SpellCheckingInspection
         self._call = [os.path.join(self._componentPath, "module", "bin", "Python", "python.exe"), script, "--fpath",
                       output_folder, "--zip", "false"]
@@ -159,7 +161,7 @@ class ReportingObserver(base.Observer):
         :return: Nothing.
         """
         databases = glob.glob(os.path.join(self._data, "mcs", "**", "store"), recursive=True)
-        start_date = datetime.datetime.strptime(self._params["lm_simulation_start"] + " 12", "%Y-%m-%d %H")
+        start_date = datetime.datetime.strptime(f"{self._params['lm_simulation_start']} 12", "%Y-%m-%d %H")
         with open(output_file, "w") as f:
             f.write("mc,key,substance,time,rate\n")
             for source in databases:
@@ -171,11 +173,11 @@ class ReportingObserver(base.Observer):
                     exposure = x3df.get_values(self._params["lm_spray_drift_ds"], slices=(slice(n_days), r))
                     for event in np.nonzero(exposure > 0):
                         if event.shape[0] > 0:
-                            f.write("{},".format(mc))
-                            f.write("r{},".format(reaches[r]))
-                            f.write("{},".format(self._params["lm_compound_name"]))
-                            f.write("{},".format((start_date + datetime.timedelta(int(event[0]))).isoformat(" ")))
-                            f.write("{:.4f}\n".format(exposure[event][0]))
+                            f.write(f"{mc},")
+                            f.write(f"r{reaches[r]},")
+                            f.write(f"{self._params['lm_compound_name']},")
+                            f.write(f"{(start_date + datetime.timedelta(int(event[0]))).isoformat(' ')},")
+                            f.write(f"{format(exposure[event][0], '4f')}\n")
         return
 
     def prepare_fate_and_effects(self, output_file, reaches):
@@ -236,7 +238,7 @@ class ReportingObserver(base.Observer):
                                         )
                                     )
                             else:
-                                raise ValueError("Unsupported scales: " + scales)
+                                raise ValueError(f"Unsupported scales: {scales}")
                 # noinspection SpellCheckingInspection
                 if self._params["cmfcont"] == "true":
                     n_hours, n_reaches = x3df.describe(self._params["lm_cmf_continuous_ds"])["shape"]
@@ -290,7 +292,7 @@ class ReportingObserver(base.Observer):
                                         )
                                     )
                             else:
-                                raise ValueError("Unsupported scales: " + scales)
+                                raise ValueError(f"Unsupported scales: {scales}")
                 if self._params["steps"] == "true":
                     n_hours, n_reaches = x3df.describe(self._params["lm_steps_river_network_ds"])["shape"]
                     # noinspection SpellCheckingInspection
@@ -335,7 +337,7 @@ class ReportingObserver(base.Observer):
                                         )
                                     )
                             else:
-                                raise ValueError("Unsupported scales: " + scales)
+                                raise ValueError(f"Unsupported scales: {scales}")
                 if mc == 0:
                     f.create_dataset(self._params["cmf_depth"], (len(databases), n_reaches, n_hours), np.float,
                                      compression="gzip", chunks=(1, 1, min(n_hours, 2 ** 18)))
@@ -368,11 +370,11 @@ class ReportingObserver(base.Observer):
                     geom = feature.GetGeometryRef()
                     coord = geom.GetPoint(0)
                     downstream = feature.GetField("downstream")
-                    f.write("r{},".format(reaches[index]))
-                    f.write("{:.2f},".format(coord[0]))
-                    f.write("{:.2f},".format(coord[1]))
-                    f.write("{}{}\n".format("" if downstream == "Outlet" else "r", downstream))
-                    f2.write("      r{}\n".format(reaches[index]))
+                    f.write(f"r{reaches[index]},")
+                    f.write(f"{format(coord[0], '2f')},")
+                    f.write(f"{format(coord[1], '2f')},")
+                    f.write(f"{'' if downstream == 'Outlet' else 'r'}{downstream}\n")
+                    f2.write(f"      r{reaches[index]}\n")
         return reaches
 
     def prepare_catchment_list(self, output_file):
@@ -394,7 +396,7 @@ class ReportingObserver(base.Observer):
         """
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, "w") as f:
-            f.write("Skipped reporting\nReason: {}\n".format(reason))
+            f.write(f"Skipped reporting\nReason: {reason}\n")
         return
 
     def flush(self):
