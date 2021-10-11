@@ -1,5 +1,15 @@
 # Changelog
-This is the changelog for the ReportingObserver. It was automatically created on 2021-09-02.
+This is the changelog for the ReportingObserver. It was automatically created on 2021-10-11.
+
+## [2.0.8] - 2021-10-11
+
+### Added
+
+### Changed
+- Replaced legacy format strings by f-strings
+
+### Fixed
+
 
 ## [2.0.7] - 2021-09-02
 
