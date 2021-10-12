@@ -1,5 +1,15 @@
 # Changelog
-This is the changelog for the ReportingObserver. It was automatically created on 2021-10-11.
+This is the changelog for the ReportingObserver. It was automatically created on 2021-10-12.
+
+## [2.0.9] - 2021-10-12
+
+### Added
+
+### Changed
+- Switched to Google docstring style
+
+### Fixed
+
 
 ## [2.0.8] - 2021-10-11
 
