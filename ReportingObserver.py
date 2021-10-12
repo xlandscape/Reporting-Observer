@@ -1,6 +1,4 @@
-"""
-A observer running Python reporting tools.
-"""
+"""An observer running Python reporting tools."""
 
 import os
 import base
@@ -15,9 +13,7 @@ import shutil
 
 
 class ReportingObserver(base.Observer):
-    """
-    A observer that runs Python reporting tools.
-    """
+    """An observer that runs Python reporting tools."""
     # RELEASES
     VERSION = base.VersionCollection(
         base.VersionInfo("2.0.8", "2021-10-11"),
@@ -58,6 +54,14 @@ class ReportingObserver(base.Observer):
     VERSION.changed("2.0.8", "Replaced legacy format strings by f-strings")
 
     def __init__(self, data, output_folder, **keywords):
+        """
+        Initializes a ReportingObserver.
+
+        Args:
+            data: The input data of the observer.
+            output_folder: The folder for the output of the reporter
+            **keywords: Additional keywords.
+        """
         super(ReportingObserver, self).__init__()
         self._output_folder = output_folder
         self._componentPath = os.path.dirname(__file__)
@@ -69,13 +73,16 @@ class ReportingObserver(base.Observer):
                       output_folder, "--zip", "false"]
         self._data = data
         self._params = keywords
-        return
 
     def experiment_finished(self, detail=None):
         """
-        Function that is called when an experiment has finished.
-        :param detail: Additional information.
-        :return: Nothing.
+        Reacts when an experiment is completed.
+
+        Args:
+            detail: Additional details to report.
+
+        Returns:
+             Nothing.
         """
         # noinspection SpellCheckingInspection
         if self._params["cascade"] != "true" and self._params["cmfcont"] != "true" and self._params["steps"] != "true":
@@ -93,57 +100,16 @@ class ReportingObserver(base.Observer):
             self.prepare_catchment_list(os.path.join(self._output_folder, "CatchmentList.csv"))
             # noinspection SpellCheckingInspection
             base.run_process(self._call, None, self.default_observer, {"HOMEPATH": self._output_folder})
-        return
-
-    def input_get_values(self, component_input):
-        """
-        Function that is called when values are retrieved.
-        :param component_input: The input that delivers values.
-        :return: Nothing.
-        """
-        return
-
-    def mc_run_finished(self, detail=None):
-        """
-        Function that is called when a Monte Carlo run has finished.
-        :param detail: Additional information.
-        :return: Nothing.
-        """
-        return
-
-    def store_set_values(self, level, store_name, message):
-        """
-        Function that is called when values are saved in a data store.
-        :param level: The level of the message.
-        :param store_name: The name of the data store.
-        :param message: The message itself.
-        :return: Nothing.
-        """
-        return
-
-    def write_message(self, level, message, detail=None):
-        """
-        Sends a generic message to the observer.
-        :param level: The level of the message.
-        :param message: The message itself.
-        :param detail: Additional information.
-        :return: Nothing.
-        """
-        return
-
-    def mc_run_started(self, composition):
-        """
-        Function that is called when a Monte Carlo run starts.
-        :param composition: The composition of the Monte Carlo run.
-        :return: Nothing.
-        """
-        return
 
     def prepare_parameterization(self, output_file):
         """
         Prepares the parameterization of the reporting observer module.
-        :param output_file: The file path of the parameterization file.
-        :return: Nothing.
+
+        Args:
+            output_file: The file path of the parameterization file.
+
+        Returns:
+            Nothing.
         """
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         attributes = xml.etree.ElementTree.Element("Attributes")
@@ -152,13 +118,16 @@ class ReportingObserver(base.Observer):
                 xml.etree.ElementTree.SubElement(attributes, key).text = value
         xml_tree = xml.etree.ElementTree.ElementTree(attributes)
         xml_tree.write(output_file, encoding="utf-8", xml_declaration=True)
-        return
 
     def prepare_spray_drift_list(self, output_file):
         """
         Prepares the spray-drift input for the reporting observer.
-        :param output_file: The file path of the spray-drift file.
-        :return: Nothing.
+
+        Args:
+            output_file: The file path of the spray-drift file.
+
+        Returns:
+            Nothing.
         """
         databases = glob.glob(os.path.join(self._data, "mcs", "**", "store"), recursive=True)
         start_date = datetime.datetime.strptime(f"{self._params['lm_simulation_start']} 12", "%Y-%m-%d %H")
@@ -178,14 +147,17 @@ class ReportingObserver(base.Observer):
                             f.write(f"{self._params['lm_compound_name']},")
                             f.write(f"{(start_date + datetime.timedelta(int(event[0]))).isoformat(' ')},")
                             f.write(f"{format(exposure[event][0], '4f')}\n")
-        return
 
     def prepare_fate_and_effects(self, output_file, reaches):
         """
         Prepares the environmental fate and effect inputs of the reporting observer module.
-        :param output_file: The file path of the H5 file with the input data.
-        :param reaches: A list of reaches.
-        :return: Nothing.
+
+        Args:
+            output_file: The file path of the H5 file with the input data.
+            reaches: A list of reaches.
+
+        Returns:
+            Nothing.
         """
         databases = glob.glob(os.path.join(self._data, "mcs", "**", "store"), recursive=True)
         start_time = datetime.datetime.strptime(self._params["t0"], "%Y-%m-%dT%H:%M")
@@ -346,14 +318,17 @@ class ReportingObserver(base.Observer):
                     r = np.nonzero(cmf_reaches == reach)[0][0]
                     f[self._params["cmf_depth"]][mc, i, 0:n_hours] = x3df.get_values(self._params["lm_cmf_depth_ds"],
                                                                                      slices=(slice(n_hours), r))
-        return
 
     def prepare_reach_list_and_get_reaches(self, output_file, output_file2):
         """
         Prepares the reach input of the reporting module.
-        :param output_file: The path of the first reaches input file.
-        :param output_file2: The path of the second reaches input file.
-        :return: Nothing
+
+        Args:
+            output_file: The path of the first reaches input file.
+            output_file2: The path of the second reaches input file.
+
+        Returns:
+            Nothing
         """
         driver = ogr.GetDriverByName("ESRI Shapefile")
         databases = glob.glob(os.path.join(self._data, "mcs", "**", "store"), recursive=True)
@@ -380,8 +355,12 @@ class ReportingObserver(base.Observer):
     def prepare_catchment_list(self, output_file):
         """
         Prepares the catchment input of the reporting observer module.
-        :param output_file: The file path of the catchment input.
-        :return: Nothing.
+
+        Args:
+            output_file: The file path of the catchment input.
+
+        Returns:
+            Nothing.
         """
         shutil.copyfile(self._params["lm_catchment"], output_file)
         return
@@ -390,26 +369,14 @@ class ReportingObserver(base.Observer):
     def write_skip_message(output_file, reason):
         """
         Writes a message that indicates why no reporting was conducted.
-        :param output_file: The file path of the message file.
-        :param reason: The reason why the reporting observer did not run.
-        :return: Nothing
+
+        Args:
+            output_file: The file path of the message file.
+            reason: The reason why the reporting observer did not run.
+
+        Returns:
+            Nothing.
         """
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, "w") as f:
             f.write(f"Skipped reporting\nReason: {reason}\n")
-        return
-
-    def flush(self):
-        """
-        Flushes the buffer of the reporter.
-        :return: Nothing.
-        """
-        return
-
-    def write(self, text):
-        """
-        Requests the reporter to write text.
-        :param text: The text to write.
-        :return: Nothing.
-        """
-        return
