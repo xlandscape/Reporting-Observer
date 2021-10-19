@@ -101,7 +101,7 @@ class ReportingObserver(base.Observer):
             self.prepare_fate_and_effects(os.path.join(self._output_folder, "res.h5"), reaches)
             self.prepare_catchment_list(os.path.join(self._output_folder, "CatchmentList.csv"))
             # noinspection SpellCheckingInspection
-            base.run_process(self._call, None, self.default_observer, {"HOMEPATH": self._output_folder})
+            base.run_process(self._call, self._output_folder, self.default_observer, {"HOMEPATH": self._output_folder})
 
     def prepare_parameterization(self, output_file):
         """
