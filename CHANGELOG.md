@@ -1,5 +1,15 @@
 # Changelog
-This is the changelog for the ReportingObserver. It was automatically created on 2021-10-12.
+This is the changelog for the ReportingObserver. It was automatically created on 2021-10-19.
+
+## [2.0.10] - 2021-10-19
+
+### Added
+
+### Changed
+- Specified working directory for module
+
+### Fixed
+
 
 ## [2.0.9] - 2021-10-12
 
