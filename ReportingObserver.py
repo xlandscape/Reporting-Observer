@@ -16,6 +16,7 @@ class ReportingObserver(base.Observer):
     """An observer that runs Python reporting tools."""
     # RELEASES
     VERSION = base.VersionCollection(
+        base.VersionInfo("2.0.10", "2021-10-19"),
         base.VersionInfo("2.0.9", "2021-10-12"),
         base.VersionInfo("2.0.8", "2021-10-11"),
         base.VersionInfo("2.0.7", "2021-09-02"),
@@ -54,6 +55,7 @@ class ReportingObserver(base.Observer):
     VERSION.added("2.0.7", "ogr module import")
     VERSION.changed("2.0.8", "Replaced legacy format strings by f-strings")
     VERSION.changed("2.0.9", "Switched to Google docstring style")
+    VERSION.changed("2.0.10", "Specified working directory for module")
 
     def __init__(self, data, output_folder, **keywords):
         """
@@ -101,7 +103,7 @@ class ReportingObserver(base.Observer):
             self.prepare_fate_and_effects(os.path.join(self._output_folder, "res.h5"), reaches)
             self.prepare_catchment_list(os.path.join(self._output_folder, "CatchmentList.csv"))
             # noinspection SpellCheckingInspection
-            base.run_process(self._call, None, self.default_observer, {"HOMEPATH": self._output_folder})
+            base.run_process(self._call, self._output_folder, self.default_observer, {"HOMEPATH": self._output_folder})
 
     def prepare_parameterization(self, output_file):
         """
