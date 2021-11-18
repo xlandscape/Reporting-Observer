@@ -16,6 +16,7 @@ class ReportingObserver(base.Observer):
     """An observer that runs Python reporting tools."""
     # RELEASES
     VERSION = base.VersionCollection(
+        base.VersionInfo("2.0.11", "2021-11-18"),
         base.VersionInfo("2.0.10", "2021-10-19"),
         base.VersionInfo("2.0.9", "2021-10-12"),
         base.VersionInfo("2.0.8", "2021-10-11"),
@@ -56,6 +57,7 @@ class ReportingObserver(base.Observer):
     VERSION.changed("2.0.8", "Replaced legacy format strings by f-strings")
     VERSION.changed("2.0.9", "Switched to Google docstring style")
     VERSION.changed("2.0.10", "Specified working directory for module")
+    VERSION.changed("2.0.11", "Removed reaches inputs")
 
     def __init__(self, data, output_folder, **keywords):
         """
