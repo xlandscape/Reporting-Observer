@@ -141,7 +141,7 @@ class ReportingObserver(base.Observer):
                 mc = os.path.normpath(source).split(os.path.sep)[6]
                 x3df = stores.X3dfStore(source, mode="r")
                 n_days, n_reaches = x3df.describe(self._params["lm_spray_drift_ds"])["shape"]
-                reaches = x3df.get_values(self._params["lm_spray_drift_reaches_ds"])
+                reaches = x3df.describe(self._params["lm_spray_drift_ds"])["element_names"][1].get_values()
                 for r in range(n_reaches):
                     exposure = x3df.get_values(self._params["lm_spray_drift_ds"], slices=(slice(n_days), r))
                     for event in np.nonzero(exposure > 0):
@@ -176,7 +176,7 @@ class ReportingObserver(base.Observer):
                     if self._params["lguts"] == "true":
                         n_days = int(n_hours / 24)
                         offset = day_difference if self._params["lm_cascade_survival_offset"] == "true" else 0
-                    cascade_reaches = x3df.get_values(self._params["lm_cascade_reaches"])
+                    cascade_reaches = x3df.describe(self._params["lm_cascade_ds"])["element_names"][1].get_values()
                     if mc == 0:
                         # noinspection SpellCheckingInspection
                         f.create_dataset(self._params["cascade_pecsw"], (len(databases), n_reaches, n_hours), np.float,
@@ -222,7 +222,7 @@ class ReportingObserver(base.Observer):
                     if self._params["lguts"] == "true":
                         n_days = int(n_hours / 24)
                         offset = day_difference if self._params["lm_cmf_survival_offset"] == "true" else 0
-                    cmf_reaches = x3df.get_values(self._params["lm_cmf_continuous_reaches"])
+                    cmf_reaches = x3df.describe(self._params["lm_cmf_continuous_ds"])["element_names"][1].get_values()
                     if mc == 0:
                         # noinspection SpellCheckingInspection
                         f.create_dataset(
@@ -275,7 +275,8 @@ class ReportingObserver(base.Observer):
                     if self._params["lguts"] == "true":
                         n_days = int(n_hours / 24)
                         offset = day_difference if self._params["lm_steps_survival_offset"] == "true" else 0
-                    steps_reaches = x3df.get_values(self._params["lm_steps_river_network_reaches"])
+                    steps_reaches = x3df.describe(
+                        self._params["lm_steps_river_network_ds"])["element_names"][1].get_values()
                     if mc == 0:
                         # noinspection SpellCheckingInspection
                         f.create_dataset(self._params["steps_pecsw"], (len(databases), n_reaches, n_hours), np.float,
@@ -318,7 +319,7 @@ class ReportingObserver(base.Observer):
                     f.create_dataset(self._params["cmf_depth"], (len(databases), n_reaches, n_hours), np.float,
                                      compression="gzip", chunks=(1, 1, min(n_hours, 2 ** 18)))
                 for i, reach in enumerate(reaches):
-                    cmf_reaches = x3df.get_values(self._params["lm_cmf_reaches_ds"])
+                    cmf_reaches = x3df.describe(self._params["lm_cmf_depth_ds"])["element_names"][1].get_values()
                     r = np.nonzero(cmf_reaches == reach)[0][0]
                     f[self._params["cmf_depth"]][mc, i, 0:n_hours] = x3df.get_values(self._params["lm_cmf_depth_ds"],
                                                                                      slices=(slice(n_hours), r))
