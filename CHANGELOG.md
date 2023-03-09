@@ -1,5 +1,15 @@
 # Changelog
-This is the changelog for the ReportingObserver. It was automatically created on 2021-11-18.
+This is the changelog for the ReportingObserver. It was automatically created on 2023-03-09.
+
+## [2.0.12] - 2023-03-09
+
+### Added
+
+### Changed
+- Removed sample project from ReportingObserver module due to file size restrictions
+
+### Fixed
+
 
 ## [2.0.11] - 2021-11-18
 

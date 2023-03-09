@@ -16,6 +16,7 @@ class ReportingObserver(base.Observer):
     """An observer that runs Python reporting tools."""
     # RELEASES
     VERSION = base.VersionCollection(
+        base.VersionInfo("2.0.12", "2023-03-09"),
         base.VersionInfo("2.0.11", "2021-11-18"),
         base.VersionInfo("2.0.10", "2021-10-19"),
         base.VersionInfo("2.0.9", "2021-10-12"),
@@ -58,6 +59,7 @@ class ReportingObserver(base.Observer):
     VERSION.changed("2.0.9", "Switched to Google docstring style")
     VERSION.changed("2.0.10", "Specified working directory for module")
     VERSION.changed("2.0.11", "Removed reaches inputs")
+    VERSION.changed("2.0.12", "Removed sample project from ReportingObserver module due to file size restrictions")
 
     def __init__(self, data, output_folder, **keywords):
         """
