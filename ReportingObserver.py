@@ -61,6 +61,14 @@ class ReportingObserver(base.Observer):
     VERSION.changed("2.0.11", "Removed reaches inputs")
     VERSION.changed("2.0.12", "Removed sample project from ReportingObserver module due to file size restrictions")
 
+    MODULE = base.Module(
+        "create reporting aqRisk@LandcapeModel",
+        "0.2",
+        "module",
+        "module/info.xml",
+        base.Module("Python", "3.7.4", "module/bin/python", "module/bin/python/Doc/python374.chm", None)
+    )
+
     def __init__(self, data, output_folder, **keywords):
         """
         Initializes a ReportingObserver.
