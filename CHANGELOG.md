@@ -1,6 +1,22 @@
 # Changelog
 
-This is the changelog for the ReportingObserver. It was automatically created on 2023-09-11.
+This is the changelog for the ReportingObserver. It was automatically created on 2023-09-12.
+
+## [2.0.14] - 2023-09-12
+
+### Added
+
+- Creation of repository info during documentation
+
+- Repository info, changelog, contributing note and license to module
+
+- Repository info to Python runtime environment
+
+### Changed
+
+- Extended module information for Python runtime environment
+
+### Fixed
 
 ## [2.0.13] - 2023-09-11
 
