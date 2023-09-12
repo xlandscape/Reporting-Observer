@@ -67,8 +67,16 @@ class ReportingObserver(base.Observer):
         "create reporting aqRisk@LandcapeModel",
         "0.2",
         "module",
-        "module/info.xml",
-        base.Module("Python", "3.7.4", "module/bin/python", "module/bin/python/Doc/python374.chm", None)
+        None,
+        base.Module(
+            "Python",
+            "3.7.4",
+            "module/bin/python",
+            "module/bin/python/Doc/python374.chm",
+            None,
+            True,
+            "module/bin/python/NEWS.txt"
+        )
     )
 
     def __init__(self, data, output_folder, **keywords):
