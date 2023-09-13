@@ -16,6 +16,7 @@ class ReportingObserver(base.Observer):
     """An observer that runs Python reporting tools."""
     # RELEASES
     VERSION = base.VersionCollection(
+        base.VersionInfo("2.0.15", "2023-09-13"),
         base.VersionInfo("2.0.14", "2023-09-12"),
         base.VersionInfo("2.0.13", "2023-09-11"),
         base.VersionInfo("2.0.12", "2023-03-09"),
@@ -67,6 +68,7 @@ class ReportingObserver(base.Observer):
     VERSION.added("2.0.14", "Creation of repository info during documentation")
     VERSION.added("2.0.14", "Repository info, changelog, contributing note and license to module")
     VERSION.added("2.0.14", "Repository info to Python runtime environment")
+    VERSION.fixed("2.0.15", "Scales of inputs")
 
     MODULE = base.Module(
         "create reporting aqRisk@LandcapeModel",
