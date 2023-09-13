@@ -1,6 +1,16 @@
 # Changelog
 
-This is the changelog for the ReportingObserver. It was automatically created on 2023-09-12.
+This is the changelog for the ReportingObserver. It was automatically created on 2023-09-13.
+
+## [2.0.15] - 2023-09-13
+
+### Added
+
+### Changed
+
+### Fixed
+
+- Scales of inputs
 
 ## [2.0.14] - 2023-09-12
 
